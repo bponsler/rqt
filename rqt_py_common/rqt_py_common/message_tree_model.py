@@ -28,7 +28,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rospy
 from python_qt_binding.QtGui import QStandardItem, QStandardItemModel
 from .data_items import ReadonlyItem
 
@@ -64,10 +63,11 @@ class MessageTreeModel(QStandardItemModel):
             item._path = slot_path
             item._user_data = kwargs.get('user_data', None)
             row.append(item)
-
+            
         is_leaf_node = False
-        if hasattr(slot, '__slots__') and hasattr(slot, '_slot_types'):
-            for child_slot_name, child_slot_type in zip(slot.__slots__, slot._slot_types):
+        if hasattr(slot, '__slots__'):
+            child_slot_type = ''
+            for child_slot_name in slot.__slots__:
                 child_slot_path = slot_path + '/' + child_slot_name
                 child_slot = getattr(slot, child_slot_name)
                 self._recursive_create_items(row[0], child_slot, child_slot_name, child_slot_type, child_slot_path, **kwargs)
@@ -132,6 +132,6 @@ class MessageTreeModel(QStandardItemModel):
         else:
             stditem = stditem_prev
 
-        rospy.logdebug('add_tree_node 1 name_curr=%s ' + '\n\t\t\t\t\tname_prev=%s row_index_parent=%d', name_curr, name_prev, row_index_parent)
+        print('add_tree_node 1 name_curr=%s ' + '\n\t\t\t\t\tname_prev=%s row_index_parent=%d', name_curr, name_prev, row_index_parent)
         if (0 < len(names_on_branch)):
             MessageTreeModel._build_tree_recursive(stditem, names_on_branch)

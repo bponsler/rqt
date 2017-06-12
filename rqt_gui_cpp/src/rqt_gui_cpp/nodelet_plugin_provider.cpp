@@ -34,8 +34,8 @@
 
 #include "roscpp_plugin_provider.h"
 
-#include <ros/callback_queue.h>
-#include <ros/ros.h>
+//#include <ros/callback_queue.h> // TODO:
+#include <rclcpp/rclcpp.hpp>
 
 #include <stdexcept>
 #include <boost/bind.hpp>
@@ -159,7 +159,8 @@ void NodeletPluginProvider::RosSpinThread::run()
 {
   while (!abort)
   {
-    ros::getGlobalCallbackQueue()->callOne(ros::WallDuration(0.1));
+    rclcpp::spin_once(std::chrono::nanoseconds(1e8)); // 0.1 secods
+    //ros::getGlobalCallbackQueue()->callOne(ros::WallDuration(0.1));
   }
 }
 

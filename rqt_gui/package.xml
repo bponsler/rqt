@@ -1,4 +1,5 @@
-<package>
+<?xml version='1.0' encoding='utf-8'?>
+<package format="2">
   <name>rqt_gui</name>
   <version>0.5.0</version>
   <description>rqt_gui provides the main to start an instance of the ROS integrated graphical user interface provided by qt_gui.</description>
@@ -12,9 +13,12 @@
 
   <author>Dirk Thomas</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament</buildtool_depend>
 
   <build_depend version_gte="0.3.0">qt_gui</build_depend>
-  <run_depend>catkin</run_depend>
-  <run_depend version_gte="0.3.0">qt_gui</run_depend>
+  <exec_depend version_gte="0.3.0">qt_gui</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>

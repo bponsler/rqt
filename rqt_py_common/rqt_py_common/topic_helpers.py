@@ -28,10 +28,11 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import roslib
-import roslib.msgs
-import roslib.message
-from rostopic import get_topic_type
+# TODO: need to handle uses of roslib and rostopic
+#import roslib
+#import roslib.msgs
+#import roslib.message
+#from rostopic import get_topic_type
 from python_qt_binding.QtCore import qDebug
 
 

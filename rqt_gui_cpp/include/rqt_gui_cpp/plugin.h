@@ -37,7 +37,7 @@
 #include <qt_gui_cpp/plugin_context.h>
 #include <qt_gui_cpp/settings.h>
 
-#include <nodelet/nodelet.h>
+#include <rclcpp/node.hpp>
 
 namespace rqt_gui_cpp {
 
@@ -48,13 +48,13 @@ namespace rqt_gui_cpp {
  */
 class Plugin
   : public qt_gui_cpp::Plugin
-  , public nodelet::Nodelet
+  , public rclcpp::node::Node
 {
 
 public:
 
   Plugin()
-    : qt_gui_cpp::Plugin()
+    : qt_gui_cpp::Plugin(), rclcpp::node::Node("rqt_gui")
   {}
 
   /**

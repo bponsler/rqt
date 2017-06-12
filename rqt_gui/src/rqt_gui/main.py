@@ -35,11 +35,14 @@
 import os
 import sys
 
-import rospy
+#import rospy
 from rospkg.rospack import RosPack
 
 from qt_gui.main import Main as Base
 
+
+def _ros_pack_find(pkg):
+    return subprocess.getoutput('rospack find %s' % pkg).strip()
 
 class Main(Base):
 
@@ -54,9 +57,9 @@ class Main(Base):
             argv = sys.argv
 
         # ignore ROS specific remapping arguments (see http://www.ros.org/wiki/Remapping%20Arguments)
-        argv = rospy.myargv(argv)
+        #argv = rospy.myargv(argv)
 
-        return super(Main, self).main(argv, standalone=standalone, plugin_argument_provider=plugin_argument_provider, plugin_manager_settings_prefix=str(hash(os.environ['ROS_PACKAGE_PATH'])))
+        return super(Main, self).main(argv, standalone=standalone, plugin_argument_provider=plugin_argument_provider, plugin_manager_settings_prefix=str(hash(os.environ['AMENT_PREFIX_PATH'])))
 
     def create_application(self, argv):
         from python_qt_binding.QtGui import QIcon

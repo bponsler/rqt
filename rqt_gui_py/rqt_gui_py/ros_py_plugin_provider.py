@@ -1,4 +1,4 @@
-# Copyright (c) 2011, Dorian Scholz, TU Darmstadt
+# Copyright (c) 2011, Dirk Thomas, TU Darmstadt
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,38 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import roslib
-import rospy
+import os
+import threading
+import time
 
-from .message_tree_model import MessageTreeModel
+import rclpy
+
+from qt_gui.composite_plugin_provider import CompositePluginProvider
+from qt_gui.errors import PluginLoadError
+
+from python_qt_binding.QtCore import qDebug, Qt, qWarning, Signal
+from python_qt_binding.QtWidgets import QMessageBox
+
+from rqt_gui.rospkg_plugin_provider import RospkgPluginProvider
 
 
-class TopicTreeModel(MessageTreeModel):
+class RosPyPluginProvider(CompositePluginProvider):
 
-    def __init__(self, parent=None):
-        super(TopicTreeModel, self).__init__(parent)
-        self.refresh()
+    _master_found_signal = Signal(int)
 
-    def refresh(self):
-        self.clear()
-        topic_list = rospy.get_published_topics()
-        for topic_path, topic_type in topic_list:
-            topic_name = topic_path.strip('/')
-            message_instance = roslib.message.get_message_class(topic_type)()
-            self.add_message(message_instance, topic_name, topic_type, topic_path)
+    def __init__(self):
+        super(RosPyPluginProvider, self).__init__([RospkgPluginProvider('rqt_gui', 'rqt_gui_py::Plugin')])
+        self.setObjectName('RosPyPluginProvider')
+        self._node_initialized = False
+
+    def load(self, plugin_id, plugin_context):
+        self._init_node()
+        return super(RosPyPluginProvider, self).load(plugin_id, plugin_context)
+
+    def _init_node(self):
+        # initialize node once
+        if not self._node_initialized:
+            name = 'rqt_gui_py_node_%d' % os.getpid()
+            qDebug('RosPyPluginProvider._init_node() initialize ROS node "%s"' % name)
+            rclpy.init(name)
+            self._node_initialized = True

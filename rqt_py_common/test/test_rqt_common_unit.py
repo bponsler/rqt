@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Software License Agreement (BSD License)
 #
 # Copyright (c) 2015, Robert Haschke
@@ -31,23 +31,29 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import sys
 import unittest
+
 
 class TestMessageTreeModel(unittest.TestCase):
     def test_path_names(self):
+        # Remove top three paths to handle test directories that get
+        # added and conflict with the installed message path
+        sys.path = sys.path[3:]
+    
         from rqt_py_common.message_tree_model import MessageTreeModel
         from rqt_py_common.msg import Val, ArrayVal
         m = MessageTreeModel()
         m.add_message(ArrayVal())
         root = m.item(0).child(0)
-        self.assertEqual(root._path, '/vals')
+        self.assertEqual(root._path, '/_vals')
         for i in range(0,5):
             child = root.child(i)
-            self.assertEqual(child._path, '/vals[%s]' % i)
+            self.assertEqual(child._path, '/_vals[%s]' % i)
             child = child.child(0)
-            self.assertEqual(child._path, '/vals[%s]/floats' % i)
+            self.assertEqual(child._path, '/_vals[%s]/_floats' % i)
             for j in range(0,5):
-                self.assertEqual(child.child(j)._path, '/vals[%s]/floats[%s]' % (i,j))
+                self.assertEqual(child.child(j)._path, '/_vals[%s]/_floats[%s]' % (i,j))
 
 
 if __name__ == '__main__':

@@ -34,8 +34,6 @@
 
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidgetItem
-import roslib
-import rospy
 
 
 class LayoutUtil(object):
@@ -65,7 +63,7 @@ class LayoutUtil(object):
             divisor = (i_widget + colors_num) % colors_num
             i_widget += 1
 
-            rospy.logdebug('LayoutUtil divisor={} i_widget={} colors_num={}'.format(
+            print('LayoutUtil divisor={} i_widget={} colors_num={}'.format(
                                                                    divisor,
                                                                    i_widget,
                                                                    colors_num))

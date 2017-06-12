@@ -28,8 +28,9 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import roslib
-import rospy
+# TODO: implement roslib and rospy
+#import roslib
+#import rospy
 
 
 class TopicDict(object):

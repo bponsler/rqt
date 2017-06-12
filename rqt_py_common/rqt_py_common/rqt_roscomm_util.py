@@ -34,13 +34,17 @@
 
 import os
 
-import genmsg
-import roslaunch
-from roslaunch import RLException
+# TODO: implement genmsg and roslaunch
+#import genmsg
+#import roslaunch
 import rospkg
-import rospy
-import rostopic
+#import rostopic
 
+
+class RLException(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
+        
 
 class RqtRoscommUtil(object):
 
@@ -80,7 +84,7 @@ class RqtRoscommUtil(object):
         except RLException:
             raise
         except Exception as e:
-            rospy.logerr("load_parameters: unable to set params " +
+            print("load_parameters: unable to set params " +
                          "(last param was [{}]): {}".format(param, e))
             raise  # re-raise as this is fatal
 
@@ -102,7 +106,7 @@ class RqtRoscommUtil(object):
             print("load_parameters: unable to set params (last param was " +
                   "[%s]): %s" % (param, e))
             raise  # re-raise as this is fatal
-        rospy.logdebug("... load_parameters complete")
+        print("... load_parameters complete")
 
     @staticmethod
     def iterate_packages(subdir):
@@ -121,10 +125,10 @@ class RqtRoscommUtil(object):
         rospack = rospkg.RosPack()
 
         pkgs = rospack.list()
-        rospy.logdebug('pkgs={}'.format(pkgs))
+        print('pkgs={}'.format(pkgs))
         for p in pkgs:
             d = os.path.join(rospack.get_path(p), subdir)
-            rospy.logdebug('rospack dir={}'.format(d))
+            print('rospack dir={}'.format(d))
             if os.path.isdir(d):
                 yield p, d
 

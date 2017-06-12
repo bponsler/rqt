@@ -81,13 +81,13 @@ class RospkgPluginProvider(RosPluginProvider):
                 if os.path.isfile(package_file_path):
                     # only try to import catkin if a PACKAGE_FILE is found
                     try:
-                        from catkin_pkg.package import parse_package, InvalidPackage
+                        from ament_package import parse_package
                     except ImportError as e:
                         qWarning('Package "%s" has a package file, but import of parser failed:\n%s' % (package_path, e))
                         continue
                     try:
                         package = parse_package(package_file_path)
-                    except InvalidPackage as e:
+                    except Exception as e:
                         qWarning('Could not parse package file "%s":\n%s' % (package_file_path, e))
                         continue
                     for export in package.exports:

@@ -57,13 +57,13 @@ import sys
 import yaml
 from optparse import OptionParser
 
-import genmsg
+# TODO: implement genmsg/rosbag/roslib
+#import genmsg
 # import genpy
-import rosbag
-import roslib
-import roslib.message
+#import rosbag
+#import roslib
+#import roslib.message
 import rospkg
-import rospy
 
 class ROSActionException(Exception): pass
 class ROSActionProtoException(Exception): pass
@@ -91,7 +91,7 @@ def rosaction_cmd_list(mode, full, argv=None):
     packs = sorted([x for x in iterate_packages(rospack, mode)])
     for (p, direc) in packs:
         for file_ in _list_types(direc, subdir, mode):
-            rospy.loginfo("%s/%s" % (p, file_))
+            print("%s/%s" % (p, file_))
 
 
 def _get_action_class_genpy(type_str, message_type, reload_on_error=False):
@@ -170,7 +170,7 @@ def _get_action_class(type_str, message_type, reload_on_error=False):
         # bootstrap our sys.path
         roslib.launcher.load_manifest(package)
 
-        rospy.loginfo('package={} type_str={} base_type={}'.format(
+        print('package={} type_str={} base_type={}'.format(
                                          package, type_str, base_type))
 
         # import the package and return the class
@@ -180,13 +180,13 @@ def _get_action_class(type_str, message_type, reload_on_error=False):
 
     except rospkg.ResourceNotFound:
         val = None
-        rospy.loginfo('_get_action_class except 1')
+        print('_get_action_class except 1')
     except ImportError:
         val = None
-        rospy.loginfo('_get_action_class except 2')
+        print('_get_action_class except 2')
     except AttributeError:
         val = None
-        rospy.loginfo('_get_action_class except 3')
+        print('_get_action_class except 3')
 
     # this logic is mainly to support rosh, so that a user doesn't
     # have to exit a shell just because a message wasn't built yet
@@ -277,7 +277,7 @@ def _list_types(path, subdir, ext):
     result = [x[:-len(ext)] for x in types]
     result.sort()
 
-    rospy.loginfo('_list_types result={}'.format(result))
+    print('_list_types result={}'.format(result))
 
     return result
 
@@ -297,7 +297,7 @@ def list_types(package, mode=MODE_ACTION):
         raise ValueError('Unknown mode for list_types: %s' % mode)
     path = os.path.join(rospack.get_path(package), subdir)
 
-    rospy.loginfo('list_types package={} mode={} path={}'.format(package, mode,
+    print('list_types package={} mode={} path={}'.format(package, mode,
                                                                  path))
 
     return [genmsg.resource_name(package, t)
@@ -328,7 +328,7 @@ def rosactionmain(mode=MODE_ACTION):
             raise ROSActionException("Invalid mode: %s" % mode)
 
         if len(sys.argv) == 1:
-            rospy.loginfo(fullusage('ros' + mode[1:]))
+            print(fullusage('ros' + mode[1:]))
             sys.exit(0)
 
         command = sys.argv[1]

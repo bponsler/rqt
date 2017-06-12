@@ -37,9 +37,6 @@
 
 #include <rqt_gui_cpp/plugin.h>
 
-#include <nodelet/loader.h>
-#include <nodelet/nodelet.h>
-
 #include <QThread>
 
 #include <string>
