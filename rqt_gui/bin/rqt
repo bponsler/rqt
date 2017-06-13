@@ -3,7 +3,10 @@ import os
 import sys
 import subprocess
 
-p = subprocess.getoutput('rospack find rqt_gui').strip()
+import rospkg
+
+rp = rospkg.RosPack()
+p = rp.get_path("rqt_gui")
 sys.path.append(os.path.join(p, 'src'))
 
 from rqt_gui.main import Main

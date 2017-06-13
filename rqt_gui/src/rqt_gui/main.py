@@ -36,13 +36,10 @@ import os
 import sys
 
 #import rospy
-from rospkg.rospack import RosPack
+from rospkg import RosPack
 
 from qt_gui.main import Main as Base
 
-
-def _ros_pack_find(pkg):
-    return subprocess.getoutput('rospack find %s' % pkg).strip()
 
 class Main(Base):
 

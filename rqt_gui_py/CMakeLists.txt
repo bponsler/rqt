@@ -9,3 +9,5 @@ ament_python_install_package(${PROJECT_NAME})
 install(FILES plugin.xml
   DESTINATION share/${PROJECT_NAME}
 )
+
+ament_package()
