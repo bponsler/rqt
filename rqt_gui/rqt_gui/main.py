@@ -35,8 +35,7 @@
 import os
 import sys
 
-#import rospy
-from rospkg import RosPack
+from ament_index_python.packages import get_package_share_directory
 
 from qt_gui.main import Main as Base
 
@@ -44,10 +43,8 @@ from qt_gui.main import Main as Base
 class Main(Base):
 
     def __init__(self, filename=None, ros_pack=None):
-        rp = ros_pack or RosPack()
-        qtgui_path = rp.get_path('qt_gui')
+        qtgui_path = get_package_share_directory('qt_gui')
         super(Main, self).__init__(qtgui_path, invoked_filename=filename, settings_filename='rqt_gui')
-        self._ros_pack = rp
 
     def main(self, argv=None, standalone=None, plugin_argument_provider=None):
         if argv is None:
@@ -61,7 +58,7 @@ class Main(Base):
     def create_application(self, argv):
         from python_qt_binding.QtGui import QIcon
         app = super(Main, self).create_application(argv)
-        logo = os.path.join(self._ros_pack.get_path('rqt_gui'), 'resource', 'rqt.png')
+        logo = os.path.join(get_package_share_directory('rqt_gui'), 'resource', 'rqt.png')
         icon = QIcon(logo)
         app.setWindowIcon(icon)
         return app
@@ -70,7 +67,6 @@ class Main(Base):
         # do not import earlier as it would import Qt stuff without the proper initialization from qt_gui.main
         from qt_gui.recursive_plugin_provider import RecursivePluginProvider
         from .rospkg_plugin_provider import RospkgPluginProvider
-        RospkgPluginProvider.rospack = self._ros_pack
         self.plugin_providers.append(RospkgPluginProvider('qt_gui', 'qt_gui_py::Plugin'))
         self.plugin_providers.append(RecursivePluginProvider(RospkgPluginProvider('qt_gui', 'qt_gui_py::PluginProvider')))
         self.plugin_providers.append(RecursivePluginProvider(RospkgPluginProvider('rqt_gui', 'rqt_gui_py::PluginProvider')))

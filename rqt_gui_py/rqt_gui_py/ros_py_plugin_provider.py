@@ -61,5 +61,5 @@ class RosPyPluginProvider(CompositePluginProvider):
         if not self._node_initialized:
             name = 'rqt_gui_py_node_%d' % os.getpid()
             qDebug('RosPyPluginProvider._init_node() initialize ROS node "%s"' % name)
-            rclpy.init(name)
+            rclpy.init()
             self._node_initialized = True

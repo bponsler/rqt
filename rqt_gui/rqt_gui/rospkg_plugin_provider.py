@@ -32,6 +32,9 @@ import os
 
 from python_qt_binding.QtCore import qDebug, qWarning
 
+from ros2pkg.api import get_package_names
+from ros2pkg.api import get_package_prefix
+
 from rospkg.common import MANIFEST_FILE, PACKAGE_FILE
 from rospkg.manifest import parse_manifest_file, InvalidManifest
 
@@ -39,18 +42,11 @@ from .ros_plugin_provider import RosPluginProvider
 
 
 class RospkgPluginProvider(RosPluginProvider):
-
-    rospack = None
-
     """`RosPluginProvider` using rospkg."""
 
     def __init__(self, export_tag, base_class_type):
         super(RospkgPluginProvider, self).__init__(export_tag, base_class_type)
         self.setObjectName('RospkgPluginProvider')
-
-        if RospkgPluginProvider.rospack is None:
-            from rospkg import RosPack
-            RospkgPluginProvider.rospack = RosPack()
 
     def _find_plugins(self, export_tag, discovery_data):
         crawl = True
@@ -62,9 +58,8 @@ class RospkgPluginProvider(RosPluginProvider):
         plugins = []
         if crawl:
             qDebug("RospkgPluginProvider._find_plugins() crawling for plugins of type '%s'" % export_tag)
-            r = RospkgPluginProvider.rospack
-            for package_name in r.list():
-                package_path = r.get_path(package_name)
+            for package_name in get_package_names():
+                package_path = os.path.join(get_package_prefix(package_name), "share", package_name)
                 manifest_file_path = os.path.join(package_path, MANIFEST_FILE)
                 if os.path.isfile(manifest_file_path):
                     try:
